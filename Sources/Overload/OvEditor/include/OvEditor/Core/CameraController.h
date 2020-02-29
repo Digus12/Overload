@@ -84,7 +84,9 @@ namespace OvEditor::Core
 		bool IsRightMousePressed() const;
 
 	private:
-		void HandleCameraXYMovement(float p_deltaTime);
+		void HandleCameraMiddleMouse(float p_deltaTime);
+		void HandleCameraPanning(float p_xoffset, float p_yoffset);
+		void HandleCameraOrbit(float p_xoffset, float p_yoffset);
 		void HandleCameraZMovement(float p_deltaTime);
 		void HandleCameraRotation(float p_deltaTime);
 		void HandleKeyboardMovement(float p_deltaTime);
@@ -113,6 +115,7 @@ namespace OvEditor::Core
 		double m_lastMousePosY = 0.0;
 		float m_mouseSensitivity = 0.05f;
 		float m_cameraDragSpeed = 0.01f;
+		float m_cameraOrbitSpeed = 0.5f;
 		float m_cameraMoveSpeed = 5.0f;
 		float m_focusDistance = 15.0f;
 		float m_focusLerpCoefficient = 6.0f;

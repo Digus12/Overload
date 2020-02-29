@@ -190,10 +190,17 @@ namespace OvRendering::LowRenderer
 		*/
 		void SetRotation(const OvMaths::FQuaternion& p_rotation);
 
+		/**
+		* Set the rotation to the camera depending on the given forward vector
+		* @param p_forward
+		*/
+		void SetForward(const OvMaths::FVector3& p_forward);
+
 	private:
 		OvMaths::FMatrix4 CalculateProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight) const;
 		OvMaths::FMatrix4 CalculateViewMatrix(const OvMaths::FVector3& p_position) const;
 		void UpdateCameraVectors();
+		void UpdateYawPitchRoll();
 
 	private:
 		OvRendering::Data::Frustum m_frustum;

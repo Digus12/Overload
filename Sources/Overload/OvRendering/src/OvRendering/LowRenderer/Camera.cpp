@@ -176,6 +176,15 @@ void OvRendering::LowRenderer::Camera::SetRotation(const OvMaths::FQuaternion & 
 	m_forward = p_rotation * OvMaths::FVector3(0.f, 0.f, 1.f);
 	m_right = p_rotation * OvMaths::FVector3(1.f, 0.f, 0.f);
 	m_up = p_rotation * OvMaths::FVector3(0.f, 1.f, 0.f);
+	UpdateYawPitchRoll();
+}
+
+void OvRendering::LowRenderer::Camera::SetForward(const OvMaths::FVector3& p_forward)
+{
+	m_forward = OvMaths::FVector3::Normalize(p_forward);
+	m_right = OvMaths::FVector3::Normalize(OvMaths::FVector3::Cross(m_forward, OvMaths::FVector3(0.0f, 1.0f, 0.0f)));
+	m_up = OvMaths::FVector3::Normalize(OvMaths::FVector3::Cross(m_right, m_forward));
+	UpdateYawPitchRoll();
 }
 
 OvMaths::FMatrix4 OvRendering::LowRenderer::Camera::CalculateProjectionMatrix(uint16_t p_windowWidth, uint16_t p_windowHeight) const
@@ -202,4 +211,12 @@ void OvRendering::LowRenderer::Camera::UpdateCameraVectors()
 	m_forward	= OvMaths::FVector3::Normalize(m_forward);
 	m_right		= OvMaths::FVector3::Normalize(OvMaths::FVector3::Cross(m_forward, OvMaths::FVector3(0.0f, 1.0f, 0.0f)));
 	m_up		= OvMaths::FVector3::Normalize(OvMaths::FVector3::Cross(m_right, m_forward));
+}
+
+void OvRendering::LowRenderer::Camera::UpdateYawPitchRoll()
+{
+	OvMaths::FMatrix3 r(m_right.x, m_right.y, m_right.z, m_up.x, m_up.y, m_up.z, m_forward.x, m_forward.y, m_forward.z);
+	m_pitch = atan2(r(2, 1), r(2, 2)) * 57.295779513f;
+	m_yaw = atan2(-r(2, 0), sqrt(r(2, 1) * r(2, 1) + r(2, 2) * r(2, 2))) * 57.295779513f;
+	m_roll = atan2(r(1, 1), r(0, 0)) * 57.295779513f;
 }
